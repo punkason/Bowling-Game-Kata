@@ -1,8 +1,8 @@
 public class Bowling {
     private String str;
     private int totalPt;
-    private static final int ZEROPOINT = 0;
-    private static final int TENPOINT = 10;
+    private static final int ZERO_POINT = 0;
+    private static final int TEN_POINT = 10;
 
     public Bowling(String str){
         this.str = str;
@@ -13,40 +13,36 @@ public class Bowling {
         // remove space in the String
         str = str.replace(" ","");
 
-        int length = str.length();
-        int[] point = new int[length];
-        boolean[] spare = new boolean[length];
-        boolean[] strike = new boolean[length];
+        final int LENGTH = str.length();
+        int[] point = new int[LENGTH];
+        boolean[] spare = new boolean[LENGTH];
+        boolean[] strike = new boolean[LENGTH];
         // Convert string to points
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < LENGTH; i++) {
             char tmp = str.charAt(i);
-            if (tmp == '-'){//handle 0 point
-                point[i] = ZEROPOINT;
-            }else if(tmp == 'X'){//handle strike
-                point[i] = TENPOINT;
+            if (tmp == '-') //handle 0 point
+                point[i] = ZERO_POINT;
+            else if(tmp == 'X'){ //handle strike
+                point[i] = TEN_POINT;
                 strike[i] = true;
-            }else if(tmp == '/'){//handle spare
-                point[i] = TENPOINT - point[i-1];
+            }else if(tmp == '/'){ //handle spare
+                point[i] = TEN_POINT - point[i-1];
                 spare[i] = true;
-            } else {
+            } else
                 point[i] = Character.getNumericValue(tmp);
-            }
         }
 
         //calculate points
-        boolean skip = false;
-        for (int i = 0; i < length && !skip; i++) {
-            if (strike[i] || spare[i]){
-                //double points for next round when strike and spare
+        boolean lastRound = false;
+        for (int i = 0; i < LENGTH && !lastRound; i++) {
+            if (strike[i] || spare[i]){ //bonus points for strike and spare
                 totalPt += point[i+1];
-                if(strike[i])//double points for next two round when strike
+                if(strike[i]) //further bonus points for strike
                     totalPt += point[i+2];
-                if (i == length - 2 && spare[i])//last round when spare
-                    skip = true;
-                else if (i == length - 3 && strike[i])//last round when strike
-                    skip = true;
+                if ((i == LENGTH - 2 && spare[i]) || (i == LENGTH - 3 && strike[i]))//last round for spare and strike
+                    lastRound = true;
             }
-            totalPt += point[i];//add point for current round
+            totalPt += point[i]; //add point for current round
         }
     }
 
