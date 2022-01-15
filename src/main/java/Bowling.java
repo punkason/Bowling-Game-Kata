@@ -1,6 +1,9 @@
 public class Bowling {
     private String str;
     private int totalPt;
+    private boolean spare[];
+    private boolean strike[];
+    private int point[];
     private static final int NOPOINT = 0;
     private static final int FULLPOINT = 10;
 
@@ -12,38 +15,50 @@ public class Bowling {
         str = s;
     }
 
-    private void updateStr(){
+    public void calculation() {
         str = str.replace(" ","");// remove space in the String
-        //str = str.replace("-","0");// Replace - to 0
-    }
 
-    private int[] strConvertInt(){
-        int[] ch = new int[str.length()];
+        int length = str.length();
+        point = new int[length];
+        spare = new boolean[length];
+        strike = new boolean[length];
 
-        for (int i = 0; i < str.length(); i++) {
+        for (int i = 0; i < length; i++) {
             char tmp = str.charAt(i);
             if (tmp == '-'){//handle 0 point
-                ch[i] = NOPOINT;
+                point[i] = NOPOINT;
             }else if(tmp == 'X'){//handle strike
-                ch[i] = FULLPOINT;
+                point[i] = FULLPOINT;
+                strike[i] = true;
             }else if(tmp == '/'){//handle spare
-                ch[i] = FULLPOINT - ch[i-1];
+                point[i] = FULLPOINT - point[i-1];
+                spare[i] = true;
             } else {
-                ch[i] = Character.getNumericValue(tmp);
+                point[i] = Character.getNumericValue(tmp);
             }
         }
-        return ch;
 
-    }
-    public void calculation() {
-        updateStr();
-
-        int[] ch = strConvertInt();
-        for (int c : ch) {
-
-            totalPt += c;
+        for (int i = 0; i < length; i++) {
+            int lastRound = length - 3;
+            if (i == lastRound && point[lastRound] == 10)
+                break;
+            else
+                totalPt += point[i];
         }
 
+        handleStrike();
+
+    }
+
+    private void handleStrike() {
+        int length = strike.length;
+        for (int i = 0; i < length;i++) {
+            if (strike[i]) {
+                if (i + 1 < length) totalPt += point[i + 1];
+                if (i + 2 < length) totalPt += point[i + 2];
+            // strike[i] = false;
+            }
+        }
     }
 
     public int getPoint() {
