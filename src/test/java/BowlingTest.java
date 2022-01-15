@@ -22,6 +22,20 @@ public class BowlingTest {
     public void check300Pts(){
         b.setInput("X X X X X X X X X X X X");
         b.calculation();
-        assertEquals(90, b. getPoint());
+        assertEquals(300, b. getPoint());
+    }
+
+    @Test
+    public void check150PtsWith55(){
+        b.setInput("5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/ 5/5");
+        b.calculation();
+        assertEquals(150, b. getPoint());
+    }
+
+    @Test
+    public void check150PtsWith64(){
+        b.setInput("6/ 6/ 6/ 6/ 6/ 6/ 6/ 6/ 6/ 6/5");
+        b.calculation();
+        assertEquals(150, b. getPoint());
     }
 }
