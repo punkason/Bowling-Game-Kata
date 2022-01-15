@@ -10,14 +10,14 @@ public class Bowling {
     }
 
     public void calculation() {
-        str = str.replace(" ","");// remove space in the String
+        // remove space in the String
+        str = str.replace(" ","");
 
-        // Convert string to points
         int length = str.length();
         int[] point = new int[length];
         boolean[] spare = new boolean[length];
         boolean[] strike = new boolean[length];
-
+        // Convert string to points
         for (int i = 0; i < length; i++) {
             char tmp = str.charAt(i);
             if (tmp == '-'){//handle 0 point
@@ -37,19 +37,16 @@ public class Bowling {
         boolean skip = false;
         for (int i = 0; i < length && !skip; i++) {
             if (strike[i] || spare[i]){
-                //double next round for strike and spare
+                //double points for next round when strike and spare
                 totalPt += point[i+1];
-                if(strike[i]){//double next two round for strike
+                if(strike[i])//double points for next two round when strike
                     totalPt += point[i+2];
-                }
-                if (i == length - 2 && spare[i]){
+                if (i == length - 2 && spare[i])//last round when spare
                     skip = true;
-                }else if (i == length - 3 && strike[i]){
+                else if (i == length - 3 && strike[i])//last round when strike
                     skip = true;
-                }
             }
-            totalPt += point[i];
-            System.out.print(totalPt + ", ");
+            totalPt += point[i];//add point for current round
         }
     }
 
